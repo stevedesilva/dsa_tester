@@ -1,5 +1,5 @@
 export type Difficulty = 'easy' | 'medium' | 'hard' | 'expert'
-export type Language = 'python' | 'java' | 'go'
+export type Language = 'python'
 export type AppState = 'idle' | 'question_loaded' | 'coding' | 'submitting' | 'results'
 
 export interface Example {
@@ -14,8 +14,6 @@ export interface TestCase {
 
 export interface FunctionSignatures {
   python: string
-  java: string
-  go: string
 }
 
 export interface Question {

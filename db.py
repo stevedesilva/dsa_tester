@@ -1,6 +1,7 @@
 """SQLite database layer for DSA Tester."""
 
 import asyncio
+import json
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     id                 INTEGER PRIMARY KEY,
     user_id            INTEGER REFERENCES users(id),
     question_id        TEXT    NOT NULL,
+    question_payload   TEXT,
     topic              TEXT    NOT NULL,
     difficulty         TEXT    NOT NULL,
     question_elo       REAL    NOT NULL,
@@ -40,6 +42,11 @@ CREATE TABLE IF NOT EXISTS sessions (
 
 def _init_db(conn: sqlite3.Connection) -> None:
     conn.executescript(_SCHEMA)
+    columns = {
+        row[1] for row in conn.execute("PRAGMA table_info(sessions)").fetchall()
+    }
+    if "question_payload" not in columns:
+        conn.execute("ALTER TABLE sessions ADD COLUMN question_payload TEXT")
     conn.commit()
 
 
@@ -82,6 +89,7 @@ def _update_user_elo(user_id: int, new_elo: float) -> None:
 def _create_session(
     user_id: int,
     question_id: str,
+    question_payload: dict,
     topic: str,
     difficulty: str,
     question_elo: float,
@@ -92,9 +100,18 @@ def _create_session(
         now = datetime.now(timezone.utc).isoformat()
         cur = conn.execute(
             """INSERT INTO sessions
-               (user_id, question_id, topic, difficulty, question_elo, language, started_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?)""",
-            (user_id, question_id, topic, difficulty, question_elo, language, now),
+               (user_id, question_id, question_payload, topic, difficulty, question_elo, language, started_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                user_id,
+                question_id,
+                json.dumps(question_payload),
+                topic,
+                difficulty,
+                question_elo,
+                language,
+                now,
+            ),
         )
         conn.commit()
         return cur.lastrowid
@@ -150,6 +167,21 @@ def _get_history(user_id: int, limit: int = 20) -> list[dict]:
         conn.close()
 
 
+def _get_session_question(session_id: int) -> dict | None:
+    conn = _get_conn()
+    try:
+        row = conn.execute(
+            "SELECT question_payload FROM sessions WHERE id = ?",
+            (session_id,),
+        ).fetchone()
+        if row is None or row["question_payload"] is None:
+            return None
+        payload = json.loads(row["question_payload"])
+        return payload if isinstance(payload, dict) else None
+    finally:
+        conn.close()
+
+
 def _sessions_today(user_id: int) -> int:
     conn = _get_conn()
     try:
@@ -176,12 +208,22 @@ async def update_user_elo(user_id: int, new_elo: float) -> None:
 async def create_session(
     user_id: int,
     question_id: str,
+    question_payload: dict,
     topic: str,
     difficulty: str,
     question_elo: float,
     language: str,
 ) -> int:
-    return await asyncio.to_thread(_create_session, user_id, question_id, topic, difficulty, question_elo, language)
+    return await asyncio.to_thread(
+        _create_session,
+        user_id,
+        question_id,
+        question_payload,
+        topic,
+        difficulty,
+        question_elo,
+        language,
+    )
 
 
 async def complete_session(session_id: int, **kwargs) -> None:
@@ -190,6 +232,10 @@ async def complete_session(session_id: int, **kwargs) -> None:
 
 async def get_history(user_id: int, limit: int = 20) -> list[dict]:
     return await asyncio.to_thread(_get_history, user_id, limit)
+
+
+async def get_session_question(session_id: int) -> dict | None:
+    return await asyncio.to_thread(_get_session_question, session_id)
 
 
 async def sessions_today(user_id: int) -> int:

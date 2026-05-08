@@ -70,6 +70,7 @@ async def get_question(topic: str = Query(default="random")) -> dict:
     session_id = await db.create_session(
         user_id=user["id"],
         question_id=question.get("id", "unknown"),
+        question_payload=question,
         topic=topic,
         difficulty=difficulty,
         question_elo=q_elo,
@@ -93,8 +94,11 @@ async def _submit_stream(req: SubmitRequest) -> AsyncGenerator[str, None]:
 
     question = _question_cache.get(req.session_id)
     if question is None:
-        yield sse({"event": "error", "message": "Session not found"})
-        return
+        question = await db.get_session_question(req.session_id)
+        if question is None:
+            yield sse({"event": "error", "message": "Session not found"})
+            return
+        _question_cache[req.session_id] = question
 
     all_test_cases = question.get("test_cases", []) + question.get("hidden_test_cases", [])
     time_limit = question.get("time_limit_seconds", 5)

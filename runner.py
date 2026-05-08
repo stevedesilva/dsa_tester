@@ -1,11 +1,73 @@
 """Subprocess code executor for Python, Java, and Go."""
 
+import ast
 import json
+import os
+import resource
 import subprocess
+import tempfile
 import textwrap
 import time
 
 from desilvaware.dsa_tester.models import TestResult
+
+_FORBIDDEN_NAMES = {
+    "__builtins__",
+    "__import__",
+    "compile",
+    "eval",
+    "exec",
+    "globals",
+    "input",
+    "locals",
+    "open",
+}
+
+_FORBIDDEN_MODULES = {
+    "asyncio",
+    "ctypes",
+    "importlib",
+    "os",
+    "pathlib",
+    "shutil",
+    "socket",
+    "subprocess",
+    "sys",
+    "tempfile",
+    "threading",
+}
+
+
+def _validate_python_code(user_code: str) -> str | None:
+    """Reject code that attempts to escape the execution harness."""
+    try:
+        tree = ast.parse(user_code)
+    except SyntaxError as exc:
+        return f"Syntax error: {exc.msg}"
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name.split(".", 1)[0] in _FORBIDDEN_MODULES:
+                    return f"Import '{alias.name}' is not allowed"
+                return "Imports are not allowed"
+        if isinstance(node, ast.ImportFrom):
+            module = (node.module or "").split(".", 1)[0]
+            if module in _FORBIDDEN_MODULES:
+                return f"Import from '{node.module}' is not allowed"
+            return "Imports are not allowed"
+        if isinstance(node, ast.Name) and node.id in _FORBIDDEN_NAMES:
+            return f"Use of '{node.id}' is not allowed"
+        if isinstance(node, ast.Attribute) and node.attr.startswith("__"):
+            return f"Attribute '{node.attr}' is not allowed"
+
+    return None
+
+
+def _apply_python_limits(time_limit: int) -> None:
+    resource.setrlimit(resource.RLIMIT_CPU, (time_limit, time_limit + 1))
+    resource.setrlimit(resource.RLIMIT_AS, (512 * 1024 * 1024, 512 * 1024 * 1024))
+    resource.setrlimit(resource.RLIMIT_FSIZE, (1024 * 1024, 1024 * 1024))
 
 
 def _build_python_harness(user_code: str, test_cases: list[dict]) -> str:
@@ -65,16 +127,38 @@ func main() {{
 
 def run_python(user_code: str, test_cases: list[dict], time_limit: int = 5) -> list[TestResult]:
     """Execute Python code against test cases."""
+    validation_error = _validate_python_code(user_code)
+    if validation_error:
+        return [
+            TestResult(
+                case_number=i,
+                passed=False,
+                elapsed_ms=0,
+                error=validation_error,
+            )
+            for i, _ in enumerate(test_cases, 1)
+        ]
+
     harness = _build_python_harness(user_code, test_cases)
     results = []
     start = time.monotonic()
     try:
-        proc = subprocess.run(
-            ["python3", "-c", harness],
-            timeout=time_limit,
-            capture_output=True,
-            text=True,
-        )
+        with tempfile.TemporaryDirectory(prefix="dsa-run-") as tmpdir:
+            proc = subprocess.run(
+                ["python3", "-I", "-B", "-S", "-c", harness],
+                timeout=time_limit,
+                capture_output=True,
+                text=True,
+                cwd=tmpdir,
+                stdin=subprocess.DEVNULL,
+                env={
+                    "HOME": tmpdir,
+                    "LC_ALL": "C.UTF-8",
+                    "PATH": os.environ.get("PATH", "/usr/bin:/bin"),
+                    "PYTHONNOUSERSITE": "1",
+                },
+                preexec_fn=lambda: _apply_python_limits(time_limit),
+            )
         elapsed_total = int((time.monotonic() - start) * 1000)
         output_lines = proc.stdout.strip().split("\n") if proc.stdout.strip() else []
         stderr = proc.stderr.strip()

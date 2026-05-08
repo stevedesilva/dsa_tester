@@ -17,8 +17,6 @@ export default function LanguageSelector({ value, onChange, disabled }: Props) {
       disabled={disabled}
     >
       <ToggleButton value="python">Python</ToggleButton>
-      <ToggleButton value="java">Java</ToggleButton>
-      <ToggleButton value="go">Go</ToggleButton>
     </ToggleButtonGroup>
   )
 }

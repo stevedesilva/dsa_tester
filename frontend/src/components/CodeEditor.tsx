@@ -10,8 +10,6 @@ interface Props {
 
 const monacoLang: Record<Language, string> = {
   python: 'python',
-  java: 'java',
-  go: 'go',
 }
 
 export default function CodeEditor({ value, onChange, language, disabled }: Props) {
