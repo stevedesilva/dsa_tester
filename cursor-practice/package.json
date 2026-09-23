@@ -1,0 +1,41 @@
+{
+  "name": "java-algorithm-practice",
+  "displayName": "Java Algorithm Practice",
+  "description": "A local Java problem bank, random practice sessions, and input/output tests for Cursor.",
+  "version": "0.1.0",
+  "publisher": "local-practice",
+  "license": "MIT",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Education"],
+  "main": "./src/extension.js",
+  "extensionKind": ["workspace"],
+  "extensionDependencies": ["redhat.java"],
+  "capabilities": { "untrustedWorkspaces": { "supported": false } },
+  "contributes": {
+    "commands": [
+      { "command": "javaPractice.home", "title": "Java Practice: Open Practice Panel" },
+      { "command": "javaPractice.add", "title": "Java Practice: Add Problem" },
+      { "command": "javaPractice.edit", "title": "Java Practice: Edit Problem" },
+      { "command": "javaPractice.random", "title": "Java Practice: Random Problem" },
+      { "command": "javaPractice.resume", "title": "Java Practice: Resume Current Attempt" },
+      { "command": "javaPractice.test", "title": "Java Practice: Run Tests" },
+      { "command": "javaPractice.history", "title": "Java Practice: Attempt History" },
+      { "command": "javaPractice.example", "title": "Java Practice: Import Relative Sort Array Example" }
+    ],
+    "configuration": {
+      "title": "Java Practice",
+      "properties": {
+        "javaPractice.javaHome": {
+          "type": "string", "default": "", "scope": "machine",
+          "description": "JDK home for compilation/execution. Empty uses JAVA_HOME, then PATH. Requires JDK 17+."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node --check src/extension.js && node --check src/core.js && node --check media/app.js",
+    "package": "vsce package --no-dependencies --allow-missing-repository"
+  },
+  "devDependencies": { "@vscode/vsce": "4.0.0", "jsdom": "26.1.0" }
+}

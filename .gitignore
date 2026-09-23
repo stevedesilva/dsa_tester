@@ -1,3 +1,5 @@
 __pycache__/
 *.pyc
 .env
+.java-practice/attempts/
+.java-practice/active.json

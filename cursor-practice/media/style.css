@@ -1,0 +1,28 @@
+:root { color-scheme: light dark; }
+body { padding: 16px 24px 40px; color: var(--vscode-foreground); font-family: var(--vscode-font-family); font-size: var(--vscode-font-size); }
+main { max-width: 950px; margin: auto; }
+h1 { font-size: 24px; }
+h2 { margin-top: 26px; font-size: 19px; }
+h3 { font-size: 13px; margin-bottom: 6px; }
+p { line-height: 1.5; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+button { padding: 8px 12px; border: 1px solid transparent; border-radius: 3px; cursor: pointer; color: var(--vscode-button-foreground); background: var(--vscode-button-background); font: inherit; }
+button:hover { background: var(--vscode-button-hoverBackground); }
+button.secondary { color: var(--vscode-button-secondaryForeground); background: var(--vscode-button-secondaryBackground); }
+button:disabled { opacity: .5; cursor: default; }
+button:focus-visible, input:focus, textarea:focus { outline: 1px solid var(--vscode-focusBorder); outline-offset: 2px; }
+label { display: block; margin: 16px 0; font-weight: 600; }
+input, textarea { display: block; box-sizing: border-box; width: 100%; margin-top: 8px; padding: 9px; border: 1px solid var(--vscode-input-border, var(--vscode-panel-border)); border-radius: 3px; color: var(--vscode-input-foreground); background: var(--vscode-input-background); font: inherit; font-weight: 400; }
+textarea { resize: vertical; tab-size: 4; }
+.code, pre { font-family: var(--vscode-editor-font-family), monospace; font-size: var(--vscode-editor-font-size); }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--vscode-textCodeBlock-background); padding: 12px; }
+.statement { white-space: pre-wrap; line-height: 1.6; padding: 16px; background: var(--vscode-textCodeBlock-background); overflow-wrap: anywhere; }
+.muted { color: var(--vscode-descriptionForeground); }
+.path { overflow-wrap: anywhere; }
+.error { color: var(--vscode-errorForeground); white-space: pre-wrap; }
+.error:empty { display: none; }
+.pass { color: var(--vscode-testing-iconPassed, #4caf80); }
+fieldset { border: 1px solid var(--vscode-panel-border); padding: 12px; margin: 20px 0; }
+.problem-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--vscode-panel-border); }
+details { padding: 12px 0; border-bottom: 1px solid var(--vscode-panel-border); }
+summary { cursor: pointer; }
