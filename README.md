@@ -25,7 +25,10 @@ In Cursor, install **Language Support for Java by Red Hat**, then run
 **Extensions: Install from VSIX…** and select the generated
 `cursor-practice/java-algorithm-practice-0.1.0.vsix`.
 
-Open this repository in Cursor and run **Java Practice: Open Practice Panel**.
+Open `dsa-tester.code-workspace` in Cursor and run **Java Practice: Open Practice Panel**.
+This makes the repository the first workspace folder, so new questions and their
+test cases are saved in this repository's `.java-practice/problems/` directory.
+Opening the parent `personal/` folder instead saves the bank outside the repository.
 The existing problem bank and two saved attempts have been moved into this
 repository's `.java-practice/` directory. Use **Resume Current Attempt** to
 continue, or **Random Problem** to start again. Keep this repository as the

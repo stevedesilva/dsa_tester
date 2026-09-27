@@ -52,6 +52,21 @@ test('structured form sends exact multiline tests and retains input after server
   } finally { dom.window.close(); }
 });
 
+test('Open Solution sends the direct editor action', () => {
+  const { dom, document, messages, receive } = setup();
+  try {
+    receive({
+      type: 'state', mode: 'home', problems: [], errors: [], running: false,
+      active: {
+        startedAt: new Date().toISOString(),
+        problem: { title: 'Echo', description: 'Echo input', tests: [{}], mainClass: 'Solution', timeLimitMs: 2000 },
+      },
+    });
+    [...document.querySelectorAll('button')].find(button => button.textContent === 'Open Solution').click();
+    assert.equal(messages.at(-1).type, 'openSolution');
+  } finally { dom.window.close(); }
+});
+
 test('problem text and compiler output are rendered as text, not executable HTML', () => {
   const { dom, document, receive } = setup();
   try {

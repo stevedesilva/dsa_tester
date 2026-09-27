@@ -1,0 +1,26 @@
+{
+  "title": "Rotate Array",
+  "description": "Write a function that rotates an array k positions to the right.\n\nFor example:\n\n    [1, 2, 3, 4, 5], k = 2 → [4, 5, 1, 2, 3]\n    [1, 2, 3], k = 4 → [3, 1, 2] (k > array length wraps around)\n    [1, 2, 3, 4], k = 0 → [1, 2, 3, 4] (no rotation)\n\nParameters:\n\n    nums: an array of integers\n    k: number of positions to rotate right\n\nReturn:\n\n    A new array with elements rotated k positions to the right\n",
+  "starterCode": "import java.util.Arrays;\nimport java.util.List;\nimport java.util.Scanner;\nimport java.util.stream.Collectors;\n\nclass Solution {\n    public static List<Integer> rotateArray(List<Integer> nums, int k) {\n        // WRITE YOUR BRILLIANT CODE HERE\n        return List.of();\n    }\n\n    public static List<String> splitWords(String s) {\n        return s.isEmpty() ? List.of() : Arrays.asList(s.split(\" \"));\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        List<Integer> nums = splitWords(scanner.nextLine()).stream().map(Integer::parseInt).collect(Collectors.toList());\n        int k = Integer.parseInt(scanner.nextLine());\n        scanner.close();\n        List<Integer> res = rotateArray(nums, k);\n        System.out.println(res.stream().map(String::valueOf).collect(Collectors.joining(\" \")));\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    {
+      "input": "1 2 3 4 5\n2",
+      "expected": "4 5 1 2 3"
+    },
+    {
+      "input": "1 2 3\n4",
+      "expected": "3 1 2"
+    },
+    {
+      "input": "1 2 3 4\n0",
+      "expected": "1 2 3 4"
+    },
+    {
+      "input": "\n3",
+      "expected": ""
+    }
+  ],
+  "id": "281363c6-4850-4e4c-96fd-ebb5a04a1a65"
+}

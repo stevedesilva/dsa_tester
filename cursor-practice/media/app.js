@@ -61,7 +61,7 @@ function renderAttempt() {
   const { problem, lastRun, startedAt } = state.active;
   app.append(element('h2', problem.title), element('p', `Attempt started ${new Date(startedAt).toLocaleString()}`, 'muted'));
   app.append(toolbar(
-    button('Open Solution', () => send('resume'), state.running, true),
+    button('Open Solution', () => send('openSolution'), state.running, true),
     button(state.running ? 'Running…' : 'Run Tests', () => send('test'), state.running),
     ...(state.running ? [button('Cancel Tests', () => send('cancel'), false, true)] : []),
   ));

@@ -65,6 +65,7 @@ function activate(context) {
           break;
         case 'random': await randomProblem(); break;
         case 'resume': await resume(); break;
+        case 'openSolution': await openSolution(); break;
         case 'test': await test(); break;
         case 'history': await history(); break;
         case 'example': await importExample(); break;
@@ -109,6 +110,21 @@ function activate(context) {
     const previous = await bank.activeAttempt();
     const attempt = await bank.startAttempt(chooseRandom(problems, previous?.problem.id));
     await openAttempt(bank, attempt);
+  }
+
+  async function openSolution() {
+    requireIdle();
+    const bank = store();
+    const attempt = await bank.activeAttempt();
+    if (!attempt) throw new Error('No current attempt. Choose Random Problem first.');
+    const file = path.join(bank.attemptPath(attempt.id), 'src', `${attempt.problem.mainClass}.java`);
+    const document = await vscode.workspace.openTextDocument(file);
+    await vscode.window.showTextDocument(document, {
+      viewColumn: panel?.viewColumn === vscode.ViewColumn.One
+        ? vscode.ViewColumn.Beside : vscode.ViewColumn.One,
+      preserveFocus: false,
+      preview: false,
+    });
   }
 
   async function resume() {
