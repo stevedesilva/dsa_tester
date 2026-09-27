@@ -20,17 +20,23 @@ test('form validation rejects missing tests, invalid entry points and invalid ti
   assert.throws(() => validateProblem(problem({ timeLimitMs: 0 })), /Time limit/);
   assert.throws(() => validateProblem(problem({ tests: [{ input: 4, expected: '' }] })), /text/);
   assert.equal(validateProblem(problem({ tests: [{ input: '', expected: '' }] })).tests.length, 1);
+  assert.equal(validateProblem(problem()).solution, '');
+  assert.throws(() => validateProblem(problem({ solution: 42 })), /solution must be text/);
 });
 
 test('storage preserves problem edits, attempt snapshots, run code and resume state across reloads', async () => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'java-practice-store-test-'));
   try {
     const store = new Store(directory);
-    const saved = await store.saveProblem(problem());
+    const solution = '// Reference answer\nclass Solution {}\n';
+    const saved = await store.saveProblem(problem({ solution }));
+    assert.equal((await new Store(directory).getProblem(saved.id)).solution, solution);
     const first = await store.startAttempt(saved);
     await store.saveProblem(problem({ title: 'Edited', tests: [{ input: 'new', expected: 'new' }] }), saved.id);
     assert.equal((await store.getProblem(saved.id)).title, 'Edited');
     assert.equal((await store.getAttempt(first.id)).problem.title, 'Echo');
+    assert.equal((await store.getAttempt(first.id)).problem.solution, solution);
+    assert.equal((await store.getProblem(saved.id)).solution, '');
     const second = await store.startAttempt(await store.getProblem(saved.id));
     await store.saveRun(first, 'submitted code', { status: 'passed', total: 1, passed: 1, cases: [] });
     const reloaded = new Store(directory);

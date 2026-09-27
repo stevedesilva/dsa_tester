@@ -61,12 +61,17 @@ function renderAttempt() {
   const { problem, lastRun, startedAt } = state.active;
   app.append(element('h2', problem.title), element('p', `Attempt started ${new Date(startedAt).toLocaleString()}`, 'muted'));
   app.append(toolbar(
-    button('Open Solution', () => send('openSolution'), state.running, true),
+    button('Open My Code', () => send('openSolution'), state.running, true),
     button(state.running ? 'Running…' : 'Run Tests', () => send('test'), state.running),
     ...(state.running ? [button('Cancel Tests', () => send('cancel'), false, true)] : []),
   ));
   app.append(element('p', `${problem.tests.length} tests · ${problem.timeLimitMs} ms per test · Java 17 · ${problem.mainClass}.java`, 'muted'));
   app.append(element('div', problem.description, 'statement'));
+  if (problem.solution?.trim()) {
+    const reference = element('details', undefined, 'reference-solution');
+    reference.append(element('summary', 'Show reference solution'), element('pre', problem.solution));
+    app.append(reference);
+  }
   if (!lastRun) return;
   const section = element('section', undefined, 'results');
   section.append(element('h2', `${lastRun.passed}/${lastRun.total} passed — ${lastRun.status}`));
@@ -101,8 +106,9 @@ function renderForm() {
     const label = element('label', title);
     const input = element(multiline ? 'textarea' : 'input');
     input.value = value;
-    if (multiline) input.rows = key === 'starterCode' ? 16 : 5;
-    if (['starterCode', 'input', 'expected'].includes(key)) input.className = 'code';
+    if (multiline) input.rows = ['starterCode', 'solution'].includes(key) ? 16 : 5;
+    if (['starterCode', 'solution', 'input', 'expected'].includes(key)) input.className = 'code';
+    input.name = key;
     input.spellcheck = false;
     label.append(input);
     parent.append(label);
@@ -120,6 +126,8 @@ function renderForm() {
   fields.timeLimitMs.min = '100';
   fields.timeLimitMs.max = '30000';
   fields.timeLimitMs.step = '1';
+  fields.solution = field('solution', 'Reference solution (optional — Java code and/or explanation)', true, initial.solution ?? '');
+  form.append(element('p', 'Saved with the question and hidden behind “Show reference solution” during practice. Your attempt starts from the starter code.', 'muted'));
   form.append(element('h2', 'Manual test cases'));
   form.append(element('p', 'Use plain text: no “Input:” labels or JSON wrappers unless your Java program expects them. Output is compared by whitespace-separated tokens; order and case matter.', 'muted'));
   const testsContainer = element('div');

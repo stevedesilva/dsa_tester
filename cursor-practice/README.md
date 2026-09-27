@@ -51,7 +51,8 @@ to develop or package it, not to use an installed VSIX.
 5. Click **Random Problem** for a fresh attempt. When multiple problems exist, the
    immediately previous problem is excluded from the next random draw.
 
-**Open Solution** reopens the current attempt. **History** lets you resume older
+**Open My Code** reopens your current Java file. **Show reference solution** reveals
+the saved answer, when one was supplied. **History** lets you resume older
 attempts. The source used for every run and its results are saved, including failed
 runs. A result describes the saved code at test time; edit the code and run again
 to get a new result.
@@ -71,6 +72,7 @@ Click **Add Problem** and fill in:
 - **Main class name**, usually `Solution` or `Main`
 - **Java starter code**, including `public static void main(String[] args)`
 - **Time limit**, in milliseconds per test (default 2000)
+- **Reference solution** (optional Java code and/or explanation; revealed on demand during practice)
 - One or more **standard input / expected output** pairs
 
 For Relative Sort Array, enter this as one test's standard input:
@@ -90,7 +92,8 @@ Enter raw text rather than `Input:` / `Output:` labels. Input is sent exactly as
 entered, then stdin is closed. Use actual blank lines when an empty array needs a
 line of its own. Empty input and empty expected output are valid test values.
 
-Use **Edit** beside a saved problem to update its statement, starter, or tests.
+Use **Edit** beside a saved problem to update its statement, starter, reference solution, or tests.
+Reference solutions are stored in the problem JSON's `solution` field alongside the tests.
 Changes apply to **new attempts**; existing attempts retain their original problem
 snapshot. Start a fresh random attempt to practice against updated tests.
 

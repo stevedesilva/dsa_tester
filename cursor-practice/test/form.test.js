@@ -28,6 +28,9 @@ test('structured form sends exact multiline tests and retains input after server
     inputs[0].value = 'Relative Sort Array';
     const textareas = document.querySelectorAll('form > label textarea');
     textareas[0].value = 'Sort according to arr2';
+    const solution = document.querySelector('[name=solution]');
+    assert.equal(solution.required, false);
+    solution.value = '// Count values\nclass Solution {}\n';
     const testFields = document.querySelectorAll('fieldset textarea');
     testFields[0].value = '2 1 2\n2 1\n';
     testFields[1].value = '2 2 1\n';
@@ -36,6 +39,7 @@ test('structured form sends exact multiline tests and retains input after server
     assert.equal(message.type, 'save');
     assert.equal(message.problem.title, 'Relative Sort Array');
     assert.equal(message.problem.mainClass, 'Solution');
+    assert.equal(message.problem.solution, solution.value);
     assert.equal(message.problem.tests[0].input, '2 1 2\n2 1\n');
     assert.equal(message.problem.tests[0].expected, '2 2 1\n');
     assert.equal(document.querySelector('button[type=submit]').disabled, true);
@@ -43,6 +47,7 @@ test('structured form sends exact multiline tests and retains input after server
     assert.equal(document.querySelector('button[type=submit]').disabled, false);
     assert.equal(inputs[0].value, 'Relative Sort Array');
     assert.equal(testFields[0].value, '2 1 2\n2 1\n');
+    assert.equal(solution.value, '// Count values\nclass Solution {}\n');
     const add = [...document.querySelectorAll('button')].find(button => button.textContent === 'Add test case');
     add.click();
     assert.equal(document.querySelectorAll('fieldset').length, 2);
@@ -52,7 +57,41 @@ test('structured form sends exact multiline tests and retains input after server
   } finally { dom.window.close(); }
 });
 
-test('Open Solution sends the direct editor action', () => {
+test('reference solutions can be edited, restored from drafts, and cleared', () => {
+  const { dom, document, messages, receive } = setup();
+  try {
+    const problem = { id: 'echo', title: 'Echo', description: 'Echo input', mainClass: 'Solution', starterCode: 'class Solution {}', timeLimitMs: 2000, tests: [{ input: '', expected: '' }], solution: 'Saved answer\n' };
+    receive({ type: 'state', mode: 'edit', problem });
+    let field = document.querySelector('[name=solution]');
+    assert.equal(field.value, problem.solution);
+    field.value = 'Edited answer\n';
+    field.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
+    receive({ type: 'state', mode: 'edit', problem });
+    field = document.querySelector('[name=solution]');
+    assert.equal(field.value, 'Edited answer\n');
+    field.value = '';
+    document.querySelector('form').dispatchEvent(new dom.window.Event('submit', { cancelable: true }));
+    assert.equal(messages.at(-1).problem.solution, '');
+  } finally { dom.window.close(); }
+});
+
+test('reference solution is collapsed, rendered as text, and absent for legacy questions', () => {
+  const { dom, document, receive } = setup();
+  try {
+    const problem = { title: 'Echo', description: 'Echo input', tests: [{}], mainClass: 'Solution', timeLimitMs: 2000, solution: '<script>alert(1)</script>\nJava answer' };
+    const state = { type: 'state', mode: 'home', problems: [], errors: [], running: false, active: { startedAt: new Date().toISOString(), problem } };
+    receive(state);
+    const reference = document.querySelector('.reference-solution');
+    assert.equal(reference.open, false);
+    assert.equal(reference.querySelector('pre').textContent, problem.solution);
+    assert.equal(reference.querySelector('script'), null);
+    delete problem.solution;
+    receive(state);
+    assert.equal(document.querySelector('.reference-solution'), null);
+  } finally { dom.window.close(); }
+});
+
+test('Open My Code sends the direct editor action', () => {
   const { dom, document, messages, receive } = setup();
   try {
     receive({
@@ -62,7 +101,7 @@ test('Open Solution sends the direct editor action', () => {
         problem: { title: 'Echo', description: 'Echo input', tests: [{}], mainClass: 'Solution', timeLimitMs: 2000 },
       },
     });
-    [...document.querySelectorAll('button')].find(button => button.textContent === 'Open Solution').click();
+    [...document.querySelectorAll('button')].find(button => button.textContent === 'Open My Code').click();
     assert.equal(messages.at(-1).type, 'openSolution');
   } finally { dom.window.close(); }
 });

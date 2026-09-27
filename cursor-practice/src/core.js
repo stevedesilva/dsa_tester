@@ -25,8 +25,12 @@ function validateProblem(value) {
   if (!Number.isInteger(timeLimitMs) || timeLimitMs < 100 || timeLimitMs > 30000) {
     throw new Error('Time limit must be 100–30000 milliseconds per test.');
   }
+  if (value.solution !== undefined && typeof value.solution !== 'string') {
+    throw new Error('Reference solution must be text.');
+  }
   return {
     title: value.title.trim(), description: value.description, starterCode: value.starterCode,
+    solution: value.solution ?? '',
     mainClass: value.mainClass, timeLimitMs, tests,
   };
 }
