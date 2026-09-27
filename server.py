@@ -10,25 +10,25 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
-import desilvaware.dsa_tester.db as db
-from desilvaware.dsa_tester.elo import (
+from . import db
+from .elo import (
     composite_score,
     question_elo_for_difficulty,
     select_difficulty,
     update_elo,
 )
-from desilvaware.dsa_tester.models import (
+from .models import (
     HistoryResponse,
     HistorySession,
     StatusResponse,
     SubmitRequest,
 )
-from desilvaware.dsa_tester.question_gen import (
+from .question_gen import (
     TOPICS,
     evaluate_explanation,
     generate_question,
 )
-from desilvaware.dsa_tester.runner import run_code
+from .runner import run_code
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -197,6 +197,10 @@ async def get_history() -> HistoryResponse:
     return HistoryResponse(sessions=sessions)
 
 
-if __name__ == "__main__":
+def main() -> None:
     import uvicorn
-    uvicorn.run("desilvaware.dsa_tester.server:app", host="127.0.0.1", port=8001, reload=True)
+    uvicorn.run("dsa_tester.server:app", host="127.0.0.1", port=8001, reload=True)
+
+
+if __name__ == "__main__":
+    main()

@@ -14,7 +14,7 @@ Each session: LLM generates a LeetCode-style question calibrated to the user's E
 uv sync
 
 # 2. Install frontend dependencies
-cd desilvaware/dsa_tester/frontend && npm install
+npm --prefix frontend ci
 
 # 3. Copy and populate environment variables
 cp .env.example .env
@@ -26,14 +26,13 @@ cp .env.example .env
 **Terminal 1 — backend:**
 ```bash
 # From project root
-uv run python desilvaware/dsa_tester/server.py
+uv run dsa-tester
 # Listening on http://127.0.0.1:8001
 ```
 
 **Terminal 2 — frontend:**
 ```bash
-cd desilvaware/dsa_tester/frontend
-npm run dev
+npm --prefix frontend run dev
 # → http://localhost:5174
 ```
 
@@ -42,7 +41,7 @@ Open http://localhost:5174 in your browser.
 ### Tests
 
 ```bash
-uv run pytest tests/dsa_tester/ -v
+uv run pytest tests/ -v
 ```
 
 ## File Map
@@ -53,6 +52,8 @@ uv run pytest tests/dsa_tester/ -v
 | `db.py` | SQLite via `asyncio.to_thread` — users + sessions tables |
 | `elo.py` | Difficulty bands, composite score, Elo update formula |
 | `question_gen.py` | LLM question generation + explanation evaluation (GPT-4o-mini) |
+| `llm.py` | Cached OpenAI client, local .env loading, JSON response parsing |
+| `pyproject.toml` / `uv.lock` | Standalone Python package and dependencies |
 | `runner.py` | Subprocess executor — Python harness, Java/Go stubs |
 | `models.py` | Pydantic request/response models |
 | `data/dsa.db` | SQLite DB (auto-created on first run) |
@@ -62,8 +63,9 @@ uv run pytest tests/dsa_tester/ -v
 ## Architecture Rules
 
 - **DB calls** — always use `asyncio.to_thread()`. Never call sqlite3 directly from async code.
-- **LLM clients** — reuse `arena.providers._get_openai_client()` (cached). Never create a new OpenAI client directly.
-- **JSON extraction** — use `arena.judge.extract_json()` to parse LLM output. Never `json.loads()` raw LLM text.
+- **LLM clients** — reuse `llm.get_openai_client()` (cached). Keep client construction in `llm.py`.
+- **JSON extraction** — use `llm.extract_json()` to parse LLM output into a dict. Never `json.loads()` raw LLM text.
+- **Package imports** — use relative imports within `dsa_tester`. This repository must run independently of sibling projects.
 - **Question cache** — `_question_cache` in `server.py` holds the full question (including hidden test cases) keyed by `session_id`. Only the public question (minus `hidden_test_cases`) is sent to the frontend.
 - **SSE format** — `data: {json}\n\n`. Use the `sse()` helper in `_submit_stream`. POST endpoint uses `StreamingResponse`; `EventSource` is not usable for POST.
 - **Code execution** — always use a fresh subprocess with `capture_output=True, text=True`. Never `exec()` or `eval()` user code in-process.
@@ -125,6 +127,8 @@ Elo floor is 100. Never allow `new_elo < 100`.
 ## Validation
 
 ```bash
-uv run ruff check desilvaware/dsa_tester/
-uv run pytest tests/dsa_tester/ -q
+uv run pytest tests/ -q
+npm --prefix frontend run build
+npm --prefix cursor-practice run check
+npm --prefix cursor-practice test
 ```

@@ -9,7 +9,7 @@ import tempfile
 import textwrap
 import time
 
-from desilvaware.dsa_tester.models import TestResult
+from .models import TestResult
 
 _FORBIDDEN_NAMES = {
     "__builtins__",

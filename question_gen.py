@@ -2,8 +2,7 @@
 
 import logging
 
-from arena.judge import extract_json
-from arena.providers import _get_openai_client
+from .llm import extract_json, get_openai_client
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +55,7 @@ Return ONLY a JSON object: {"score": <float>}"""
 
 def generate_question(topic: str, difficulty: str, question_elo: float) -> dict:
     """Generate a DSA question using LLM. Returns parsed question dict."""
-    client = _get_openai_client(base_url=None, api_key=None)
+    client = get_openai_client()
     prompt = (
         f"Generate a {difficulty} difficulty coding problem about {topic}. "
         f"The question difficulty Elo should be approximately {question_elo:.0f}. "
@@ -88,7 +87,7 @@ def evaluate_explanation(
     pass_rate: float,
 ) -> float:
     """Score explanation quality 0.0-1.0 using LLM."""
-    client = _get_openai_client(base_url=None, api_key=None)
+    client = get_openai_client()
     prompt = (
         f"Problem: {question.get('title', 'Unknown')}\n"
         f"Description: {question.get('description', '')[:500]}\n\n"
