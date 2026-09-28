@@ -103,6 +103,12 @@ test('Open My Code sends the direct editor action', () => {
     });
     [...document.querySelectorAll('button')].find(button => button.textContent === 'Open My Code').click();
     assert.equal(messages.at(-1).type, 'openSolution');
+    const update = [...document.querySelectorAll('button')].find(button => button.textContent === 'Update Tests');
+    update.click();
+    assert.equal(messages.at(-1).type, 'updateTests');
+    receive({ type: 'state', mode: 'home', problems: [], errors: [], running: true,
+      active: { startedAt: new Date().toISOString(), problem: { title: 'Echo', description: '', tests: [{}] } } });
+    assert.equal([...document.querySelectorAll('button')].find(button => button.textContent === 'Update Tests').disabled, true);
   } finally { dom.window.close(); }
 });
 

@@ -96,6 +96,10 @@ Use **Edit** beside a saved problem to update its statement, starter, reference 
 Reference solutions are stored in the problem JSON's `solution` field alongside the tests.
 Changes apply to **new attempts**; existing attempts retain their original problem
 snapshot. Start a fresh random attempt to practice against updated tests.
+Alternatively, click **Update Tests** in the current attempt to load the bank's
+latest test cases and time limit without replacing your Java code. This clears the
+displayed results so you can run the updated tests; previous run files remain saved.
+Other question fields retain their original snapshot until you start a new attempt.
 
 ### Problem contract
 

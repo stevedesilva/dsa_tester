@@ -62,10 +62,12 @@ function renderAttempt() {
   app.append(element('h2', problem.title), element('p', `Attempt started ${new Date(startedAt).toLocaleString()}`, 'muted'));
   app.append(toolbar(
     button('Open My Code', () => send('openSolution'), state.running, true),
+    button('Update Tests', () => send('updateTests'), state.running, true),
     button(state.running ? 'Running…' : 'Run Tests', () => send('test'), state.running),
     ...(state.running ? [button('Cancel Tests', () => send('cancel'), false, true)] : []),
   ));
   app.append(element('p', `${problem.tests.length} tests · ${problem.timeLimitMs} ms per test · Java 17 · ${problem.mainClass}.java`, 'muted'));
+  app.append(element('p', 'Edited the question’s test cases? Click Update Tests to load the latest saved tests into this attempt.', 'muted'));
   app.append(element('div', problem.description, 'statement'));
   if (problem.solution?.trim()) {
     const reference = element('details', undefined, 'reference-solution');
@@ -99,7 +101,7 @@ function renderForm() {
   };
   app.append(element('h2', id ? 'Edit Problem' : 'Add Problem'));
   app.append(element('p', 'Paste the statement and starter code. Add raw stdin and expected stdout for each test. The starter must have a main method and no package declaration.'));
-  if (id) app.append(element('p', 'Edits apply to new attempts. Existing attempts keep their original problem and tests.', 'muted'));
+  if (id) app.append(element('p', 'Edits apply to new attempts. For your current attempt, click Update Tests after saving to load the latest tests and time limit.', 'muted'));
   const form = element('form');
   const fields = {};
   function field(key, title, multiline, value, parent = form) {

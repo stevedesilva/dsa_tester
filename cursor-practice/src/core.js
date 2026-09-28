@@ -103,6 +103,16 @@ class Store {
     return attempt;
   }
 
+  async updateAttemptTests(id) {
+    const attempt = await this.getAttempt(id);
+    const latest = await this.getProblem(attempt.problem.id);
+    attempt.problem.tests = latest.tests;
+    attempt.problem.timeLimitMs = latest.timeLimitMs;
+    delete attempt.lastRun;
+    await writeJson(path.join(this.attemptPath(id), 'attempt.json'), attempt);
+    return attempt;
+  }
+
   async activeAttempt() {
     let active;
     try { active = await readJson(path.join(this.root, 'active.json')); }

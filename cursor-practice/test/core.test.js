@@ -56,6 +56,30 @@ test('storage preserves problem edits, attempt snapshots, run code and resume st
   } finally { await fs.rm(directory, { recursive: true, force: true }); }
 });
 
+test('updating attempt tests loads saved edits, preserves code and archived runs, and clears stale results', async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'java-practice-update-test-'));
+  try {
+    const store = new Store(directory);
+    const saved = await store.saveProblem(problem());
+    const attempt = await store.startAttempt(saved);
+    const source = path.join(store.attemptPath(attempt.id), 'src', 'Solution.java');
+    await fs.writeFile(source, '// My work');
+    await store.saveRun(attempt, '// Previous work', { status: 'passed', total: 1, passed: 1, cases: [] });
+    const runId = attempt.lastRun.runId;
+    const tests = [{ input: 'new\n', expected: 'new' }, { input: 'second\n', expected: 'second' }];
+    await store.saveProblem(problem({ tests, timeLimitMs: 3000 }), saved.id);
+    assert.equal((await store.getAttempt(attempt.id)).problem.tests.length, 1);
+    await store.updateAttemptTests(attempt.id);
+    const updated = await new Store(directory).getAttempt(attempt.id);
+    assert.deepEqual(updated.problem.tests, tests);
+    assert.equal(updated.problem.timeLimitMs, 3000);
+    assert.equal(updated.lastRun, undefined);
+    assert.equal(await fs.readFile(source, 'utf8'), '// My work');
+    assert.equal(await fs.readFile(path.join(store.attemptPath(attempt.id), 'runs', runId, 'Solution.java'), 'utf8'), '// Previous work');
+    assert.equal((await store.activeAttempt()).id, attempt.id);
+  } finally { await fs.rm(directory, { recursive: true, force: true }); }
+});
+
 test('random selection handles empty/single banks and avoids immediate repeats', () => {
   assert.throws(() => chooseRandom([]), /empty/);
   assert.equal(chooseRandom([{ id: 'one' }], 'one').id, 'one');

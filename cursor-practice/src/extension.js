@@ -66,6 +66,7 @@ function activate(context) {
         case 'random': await randomProblem(); break;
         case 'resume': await resume(); break;
         case 'openSolution': await openSolution(); break;
+        case 'updateTests': await updateTests(); break;
         case 'test': await test(); break;
         case 'history': await history(); break;
         case 'example': await importExample(); break;
@@ -133,6 +134,16 @@ function activate(context) {
     const attempt = await bank.activeAttempt();
     if (!attempt) throw new Error('No current attempt. Choose Random Problem first.');
     await openAttempt(bank, attempt);
+  }
+
+  async function updateTests() {
+    requireIdle();
+    const bank = store();
+    const attempt = await bank.activeAttempt();
+    if (!attempt) throw new Error('No current attempt. Choose Random Problem first.');
+    await bank.updateAttemptTests(attempt.id);
+    await refresh();
+    vscode.window.showInformationMessage('Loaded the latest saved tests and time limit. Run Tests to check your code.');
   }
 
   async function test() {
