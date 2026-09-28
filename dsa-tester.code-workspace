@@ -1,5 +1,15 @@
 {
   "folders": [
     { "path": "." }
-  ]
+  ],
+  "settings": {
+    "cursor.cpp.disabled": true,
+    "editor.inlineSuggest.enabled": false,
+    "editor.quickSuggestions": false,
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.tabCompletion": "off",
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.wordBasedSuggestions": "off",
+    "editor.suggest.preview": false
+  }
 }
