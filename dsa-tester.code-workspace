@@ -5,11 +5,17 @@
   "settings": {
     "cursor.cpp.disabled": true,
     "editor.inlineSuggest.enabled": false,
-    "editor.quickSuggestions": false,
+    "editor.quickSuggestions": {
+      "other": "on",
+      "comments": "off",
+      "strings": "off"
+    },
     "editor.suggestOnTriggerCharacters": false,
     "editor.tabCompletion": "off",
     "editor.acceptSuggestionOnEnter": "off",
-    "editor.wordBasedSuggestions": "off",
+    "editor.wordBasedSuggestions": "currentDocument",
+    "editor.suggest.showWords": true,
+    "java.completion.enabled": false,
     "editor.suggest.preview": false
   }
 }
