@@ -1,0 +1,14 @@
+{
+  "id": "m4-strings-1-reverse-string",
+  "title": "M4 Strings - 1 Reverse String",
+  "description": "Write a function that reverses a string. The function should take a string as input and return a new string with characters in reverse order.\n\nFor example:\n\n    \"hello\" → \"olleh\"\n    \"AlgoMonster\" → \"retsnoMoglA\"\n    \"a\" → \"a\"\n\nParameters:\n\n    s: a string to reverse\n\nReturn:\n\n    The reversed string",
+  "starterCode": "import java.util.Scanner;\n\nclass Solution {\n    public static String reverseString(String s) {\n        // WRITE YOUR BRILLIANT CODE HERE\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        String res = reverseString(s);\n        System.out.println(res);\n    }\n}\n",
+  "solution": "import java.util.Scanner;\n\nclass Solution {\n    public static String reverseString(String s) {\n        char[] chars = s.toCharArray();\n        int left = 0;\n        int right = chars.length - 1;\n        while (left < right) {\n            char temp = chars[left];\n            chars[left] = chars[right];\n            chars[right] = temp;\n            left++;\n            right--;\n        }\n        return new String(chars);\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        String res = reverseString(s);\n        System.out.println(res);\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    { "input": "hello\n", "expected": "olleh\n" },
+    { "input": "AlgoMonster\n", "expected": "retsnoMoglA\n" },
+    { "input": "a\n", "expected": "a\n" }
+  ]
+}
