@@ -1,0 +1,14 @@
+{
+  "id": "m4-strings-4-remove-vowels",
+  "title": "M4 Strings - 4 Remove Vowels",
+  "description": "Write a function that removes all vowels from a given string. Vowels include both lowercase (a, e, i, o, u) and uppercase (A, E, I, O, U) letters.\n\nFor example:\n\n    \"hello world\" becomes \"hll wrld\"\n    \"AlgoMonster\" becomes \"lgMnstr\"\n    \"aeiou\" becomes \"\" (empty string)\n\nParameters:\n\n    s: a string to process\n\nReturn:\n\n    A new string with all vowels removed",
+  "starterCode": "import java.util.Scanner;\n\nclass Solution {\n    public static String removeVowels(String s) {\n        // Write your solution here.\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        System.out.println(removeVowels(s));\n    }\n}\n",
+  "solution": "import java.lang.StringBuilder;\nimport java.util.Scanner;\n\nclass Solution {\n    public static String removeVowels(String s) {\n        // Define vowels (both lowercase and uppercase)\n        String vowels = \"aeiouAEIOU\";\n        // Build result string by filtering out vowels\n        StringBuilder result = new StringBuilder();\n        for (char c : s.toCharArray()) {\n            if (vowels.indexOf(c) == -1) {\n                result.append(c);\n            }\n        }\n        return result.toString();\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        String res = removeVowels(s);\n        System.out.println(res);\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    { "input": "hello world\n", "expected": "hll wrld\n" },
+    { "input": "AlgoMonster\n", "expected": "lgMnstr\n" },
+    { "input": "aeiou\n", "expected": "\n" }
+  ]
+}

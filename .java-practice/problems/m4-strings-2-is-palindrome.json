@@ -1,0 +1,14 @@
+{
+  "id": "m4-strings-2-is-palindrome",
+  "title": "M4 Strings - 2 Is Palindrome",
+  "description": "Write a function that checks if a given string is a palindrome. A palindrome is a word, phrase, or sequence that reads the same backward as forward.\n\nFor example:\n\n    \"racecar\" is a palindrome\n    \"hello\" is not a palindrome\n    \"a\" is a palindrome (single character)\n\nParameters:\n\n    s: a string to check\n\nReturn:\n\n    true if the string is a palindrome, false otherwise",
+  "starterCode": "import java.util.Scanner;\n\nclass Solution {\n    public static boolean isPalindrome(String s) {\n        // Write your solution here.\n        return false;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        System.out.println(isPalindrome(s));\n    }\n}\n",
+  "solution": "import java.util.Scanner;\n\nclass Solution {\n    public static boolean isPalindrome(String s) {\n        // Reverse the string and compare\n        String reversed = new StringBuilder(s).reverse().toString();\n        return s.equals(reversed);\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        boolean res = isPalindrome(s);\n        System.out.println(res);\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    { "input": "racecar\n", "expected": "true\n" },
+    { "input": "hello\n", "expected": "false\n" },
+    { "input": "a\n", "expected": "true\n" }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "m4-strings-5-string-compression",
+  "title": "M4 Strings - 5 String Compression",
+  "description": "Write a function that compresses a string by replacing consecutive identical characters with the character followed by the count of repetitions.\n\nFor example:\n\n    \"aaabbc\" becomes \"a3b2c1\"\n    \"aabbccdd\" becomes \"a2b2c2d2\"\n    \"abc\" becomes \"a1b1c1\"\n\nParameters:\n\n    s: a string to compress\n\nReturn:\n\n    A compressed string where each character is followed by its count",
+  "starterCode": "import java.util.Scanner;\n\nclass Solution {\n    public static String compressString(String s) {\n        // Write your solution here.\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        System.out.println(compressString(s));\n    }\n}\n",
+  "solution": "import java.lang.StringBuilder;\nimport java.util.Scanner;\n\nclass Solution {\n    public static String compressString(String s) {\n        // Handle empty string\n        if (s.length() == 0) {\n            return \"\";\n        }\n        // Build compressed string\n        StringBuilder result = new StringBuilder();\n        int count = 1;\n        for (int i = 1; i < s.length(); i++) {\n            if (s.charAt(i) == s.charAt(i - 1)) {\n                // Same character, increment count\n                count++;\n            } else {\n                // Different character, add to result\n                result.append(s.charAt(i - 1));\n                result.append(count);\n                count = 1;\n            }\n        }\n        // Add the last group\n        result.append(s.charAt(s.length() - 1));\n        result.append(count);\n        return result.toString();\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        String res = compressString(s);\n        System.out.println(res);\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    { "input": "aaabbc\n", "expected": "a3b2c1\n" },
+    { "input": "aabbccdd\n", "expected": "a2b2c2d2\n" },
+    { "input": "abc\n", "expected": "a1b1c1\n" }
+  ]
+}
