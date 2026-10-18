@@ -1,0 +1,23 @@
+{
+  "id": "m9-sorting-5-arithmetic-progression",
+  "title": "M9 Sorting - 5 Arithmetic Progression",
+  "description": "Given an array of numbers, determine if the array can make an arithmetic progression after rearranging its elements.\n\nAn arithmetic progression is a sequence where the difference between consecutive terms is constant. For example, [1, 3, 5, 7] is an arithmetic progression with a common difference of 2.\n\nInput\n\n    arr: a list of integers\n\nOutput\n\nA boolean: true if the array can form an arithmetic progression after rearranging, false otherwise\n\nExamples\n\nExample 1:\n\nInput: arr = [3, 5, 1]\n\nOutput: true\n\nExplanation:\n\n    After sorting: [1, 3, 5]\n    Differences: 3-1=2, 5-3=2\n    Common difference is 2, so this forms an arithmetic progression\n\nExample 2:\n\nInput: arr = [1, 2, 4]\n\nOutput: false\n\nExplanation:\n\n    After sorting: [1, 2, 4]\n    Differences: 2-1=1, 4-2=2\n    Different differences (1 and 2), so this does NOT form an arithmetic progression\n\nExample 3:\n\nInput: arr = [1, 3]\n\nOutput: true\n\nExplanation:\n\n    Any array with 2 or fewer elements can always form an arithmetic progression",
+  "starterCode": "import java.util.Arrays;\nimport java.util.List;\nimport java.util.Scanner;\nimport java.util.stream.Collectors;\n\nclass Solution {\n    public static boolean canMakeArithmeticProgression(List<Integer> arr) {\n        // WRITE YOUR BRILLIANT CODE HERE\n        return false;\n    }\n\n    public static List<String> splitWords(String s) {\n        return s.isEmpty() ? List.of() : Arrays.asList(s.split(\" \"));\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        List<Integer> arr = splitWords(scanner.nextLine()).stream().map(Integer::parseInt).collect(Collectors.toList());\n        scanner.close();\n        boolean res = canMakeArithmeticProgression(arr);\n        System.out.println(res);\n    }\n}\n",
+  "solution": "import java.util.Arrays;\nimport java.util.List;\nimport java.util.Scanner;\nimport java.util.stream.Collectors;\n\nclass Solution {\n    public static boolean canMakeArithmeticProgression(List<Integer> arr) {\n        if (arr.size() <= 2) {\n            return true;\n        }\n\n        arr.sort(null);\n\n        int diff = arr.get(1) - arr.get(0);\n        for (int i = 2; i < arr.size(); i++) {\n            if (arr.get(i) - arr.get(i - 1) != diff) {\n                return false;\n            }\n        }\n\n        return true;\n    }\n\n    public static List<String> splitWords(String s) {\n        return s.isEmpty() ? List.of() : Arrays.asList(s.split(\" \"));\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        List<Integer> arr = splitWords(scanner.nextLine()).stream().map(Integer::parseInt).collect(Collectors.toList());\n        scanner.close();\n        boolean res = canMakeArithmeticProgression(arr);\n        System.out.println(res);\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    {
+      "input": "3 5 1\n",
+      "expected": "true\n"
+    },
+    {
+      "input": "1 2 4\n",
+      "expected": "false\n"
+    },
+    {
+      "input": "1 3\n",
+      "expected": "true\n"
+    }
+  ]
+}

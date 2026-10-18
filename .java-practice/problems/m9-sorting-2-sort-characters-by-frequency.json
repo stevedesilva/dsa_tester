@@ -1,0 +1,23 @@
+{
+  "id": "m9-sorting-2-sort-characters-by-frequency",
+  "title": "M9 Sorting - 2 Sort Characters by Frequency",
+  "description": "Input: \"tree\"\nOutput: \"eert\"\nExplanation: 'e' appears twice, 'r' and 't' appear once each.\n             Result: \"ee\" + \"rt\" (alphabetically sorted)\n\nInput: \"cccaaa\"\nOutput: \"aaaccc\"\nExplanation: Both 'a' and 'c' appear 3 times.\n             Since 'a' < 'c' alphabetically, 'a' comes first.\n\nInput: \"Aabb\"\nOutput: \"bbAa\"\nExplanation: 'b' appears twice, 'A' and 'a' appear once each.\n             Result: \"bb\" + \"Aa\" (alphabetically sorted by character code)",
+  "starterCode": "import java.util.Scanner;\n\nclass Solution {\n    public static String sortByFrequency(String s) {\n        // WRITE YOUR BRILLIANT CODE HERE\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        String res = sortByFrequency(s);\n        System.out.println(res);\n    }\n}\n",
+  "solution": "import java.util.ArrayList;\nimport java.util.Collections;\nimport java.util.HashMap;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.Scanner;\n\nclass Solution {\n    public static String sortByFrequency(String s) {\n        Map<Character, Integer> freq = new HashMap<>();\n        for (char c : s.toCharArray()) {\n            freq.put(c, freq.getOrDefault(c, 0) + 1);\n        }\n\n        List<Character> chars = new ArrayList<>(freq.keySet());\n        Collections.sort(chars, (a, b) -> {\n            int freqCompare = freq.get(b).compareTo(freq.get(a));\n            if (freqCompare != 0) {\n                return freqCompare;\n            }\n            return a.compareTo(b);\n        });\n\n        StringBuilder result = new StringBuilder();\n        for (char c : chars) {\n            int count = freq.get(c);\n            for (int i = 0; i < count; i++) {\n                result.append(c);\n            }\n        }\n\n        return result.toString();\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        String res = sortByFrequency(s);\n        System.out.println(res);\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    {
+      "input": "tree\n",
+      "expected": "eert\n"
+    },
+    {
+      "input": "cccaaa\n",
+      "expected": "aaaccc\n"
+    },
+    {
+      "input": "Aabb\n",
+      "expected": "bbAa\n"
+    }
+  ]
+}

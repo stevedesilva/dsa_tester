@@ -19,6 +19,28 @@ function setup() {
   return { dom, document: dom.window.document, messages, receive };
 }
 
+test('Practice selects its question, keeps random selection, and is disabled during a run', () => {
+  const { dom, document, messages, receive } = setup();
+  try {
+    const state = { type: 'state', mode: 'home', errors: [], running: false,
+      problems: [{ id: 'first', title: 'First', tests: [{}] }, { id: 'second', title: 'Second', tests: [{}] }] };
+    receive(state);
+    document.querySelectorAll('.problem-row')[1].querySelector('button').click();
+    assert.equal(messages.at(-1).type, 'practice');
+    assert.equal(messages.at(-1).id, 'second');
+    [...document.querySelectorAll('button')].find(b => b.textContent === 'Random Problem').click();
+    assert.equal(messages.at(-1).type, 'random');
+    receive({ ...state, running: true });
+    const count = messages.length;
+    for (const row of document.querySelectorAll('.problem-row')) {
+      const button = row.querySelector('button');
+      assert.equal(button.disabled, true);
+      button.click();
+    }
+    assert.equal(messages.length, count);
+  } finally { dom.window.close(); }
+});
+
 test('structured form sends exact multiline tests and retains input after server validation errors', () => {
   const { dom, document, messages, receive } = setup();
   try {

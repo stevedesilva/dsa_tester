@@ -42,7 +42,7 @@ function render() {
   ));
   if (state.active) renderAttempt();
   app.append(element('h2', `Problem bank (${state.problems.length})`));
-  app.append(element('p', 'Random selection avoids the immediately previous problem when the bank has more than one entry.', 'muted'));
+  app.append(element('p', 'Choose Practice to start a fresh attempt, or use Random Problem. Random selection avoids the immediately previous problem when the bank has more than one entry.', 'muted'));
   if (!state.problems.length) {
     app.append(element('p', 'Add your first problem using the structured form, or import Relative Sort Array to try the workflow.'));
     app.append(button('Import Relative Sort Array', () => send('example')));
@@ -50,6 +50,7 @@ function render() {
   for (const problem of state.problems) {
     const row = element('div', undefined, 'problem-row');
     row.append(element('span', `${problem.title} · ${problem.tests.length} tests`),
+      button('Practice', () => send('practice', { id: problem.id }), state.running),
       button('Edit', () => send('edit', { id: problem.id }), false, true));
     app.append(row);
   }

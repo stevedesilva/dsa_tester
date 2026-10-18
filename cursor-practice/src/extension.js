@@ -64,6 +64,7 @@ function activate(context) {
           vscode.window.showInformationMessage('Problem saved to your local bank.');
           break;
         case 'random': await randomProblem(); break;
+        case 'practice': await practiceProblem(message.id); break;
         case 'resume': await resume(); break;
         case 'openSolution': await openSolution(); break;
         case 'updateTests': await updateTests(); break;
@@ -99,6 +100,14 @@ function activate(context) {
 
   async function saveEditors() {
     if (!await vscode.workspace.saveAll(false)) throw new Error('Save your open files before changing attempts.');
+  }
+
+  async function practiceProblem(id) {
+    requireIdle();
+    await saveEditors();
+    const bank = store();
+    const problem = await bank.getProblem(id);
+    await openAttempt(bank, await bank.startAttempt(problem));
   }
 
   async function randomProblem() {

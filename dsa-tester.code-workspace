@@ -12,15 +12,19 @@
     "cursor.cpp.disabled": true,
     "editor.inlineSuggest.enabled": false,
     "editor.quickSuggestions": {
-      "other": "on",
+      "other": "off",
       "comments": "off",
       "strings": "off"
     },
     "editor.suggestOnTriggerCharacters": false,
     "editor.tabCompletion": "off",
     "editor.acceptSuggestionOnEnter": "off",
-    "editor.wordBasedSuggestions": "currentDocument",
-    "editor.suggest.showWords": true,
+    "editor.wordBasedSuggestions": "off",
+    "editor.suggest.showWords": false,
+    "editor.snippetSuggestions": "none",
+    "editor.parameterHints.enabled": false,
+    "editor.inlayHints.enabled": "off",
+    "github.copilot.enable": { "*": false },
     "java.completion.enabled": false,
     "editor.suggest.preview": false,
     "java.configuration.runtimes": [

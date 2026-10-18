@@ -89,6 +89,20 @@ class Store {
     await fs.writeFile(path.join(directory, 'PROBLEM.md'), `# ${problem.title}\n\n${problem.description}\n`);
     await writeJson(path.join(directory, '.vscode', 'settings.json'), {
       'java.project.sourcePaths': ['src'], 'java.project.outputPath': 'bin',
+      'cursor.cpp.disabled': true,
+      'github.copilot.enable': { '*': false },
+      'editor.inlineSuggest.enabled': false,
+      'editor.quickSuggestions': { other: 'off', comments: 'off', strings: 'off' },
+      'editor.suggestOnTriggerCharacters': false,
+      'editor.tabCompletion': 'off',
+      'editor.acceptSuggestionOnEnter': 'off',
+      'editor.wordBasedSuggestions': 'off',
+      'editor.suggest.showWords': false,
+      'editor.suggest.preview': false,
+      'editor.snippetSuggestions': 'none',
+      'editor.parameterHints.enabled': false,
+      'editor.inlayHints.enabled': 'off',
+      'java.completion.enabled': false,
     });
     const attempt = { id, startedAt: new Date().toISOString(), problem };
     await writeJson(path.join(directory, 'attempt.json'), attempt);

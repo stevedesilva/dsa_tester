@@ -1,0 +1,23 @@
+{
+  "id": "m9-sorting-7-maximum-product-of-three",
+  "title": "M9 Sorting - 7 Maximum Product of Three",
+  "description": "Given an integer array, find the maximum product of any three numbers.\n\nThis problem demonstrates why sorting helps reveal the solution structure. With negative numbers in the array, the maximum product isn't always the three largest numbers.\n\nInput\n\n    nums: a list of integers (may contain negative numbers)\n\nOutput\n\nAn integer representing the maximum product of any three numbers\n\nExamples\n\nExample 1:\n\nInput: nums = [1, 2, 3, 4]\n\nOutput: 24\n\nExplanation:\n\n    All numbers are positive\n    Maximum product: 4 * 3 * 2 = 24\n\nExample 2:\n\nInput: nums = [-4, -3, 1, 2, 3]\n\nOutput: 36\n\nExplanation:\n\n    Two large negative numbers multiplied together give a positive result\n    Option 1: 3 * 2 * 1 = 6\n    Option 2: (-4) * (-3) * 3 = 36\n    Maximum: 36\n\nExample 3:\n\nInput: nums = [-10, -10, 5, 2]\n\nOutput: 500\n\nExplanation:\n\n    Option 1: 5 * 2 * (-10) = -100\n    Option 2: (-10) * (-10) * 5 = 500\n    Maximum: 500",
+  "starterCode": "import java.util.Arrays;\nimport java.util.List;\nimport java.util.Scanner;\nimport java.util.stream.Collectors;\nimport java.util.Collections;\nclass Solution {\n    public static int maxProductOfThree(List<Integer> num) {\n        // WRITE YOUR BRILLIANT CODE HERE\n        return 0;\n    }\n\n    public static List<String> splitWords(String s) {\n        return s.isEmpty() ? List.of() : Arrays.asList(s.split(\" \"));\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        List<Integer> nums = splitWords(scanner.nextLine()).stream().map(Integer::parseInt).collect(Collectors.toList());\n        scanner.close();\n        int res = maxProductOfThree(nums);\n        System.out.println(res);\n    }\n}\n",
+  "solution": "import java.util.Arrays;\nimport java.util.List;\nimport java.util.Scanner;\nimport java.util.stream.Collectors;\n\nclass Solution {\n    public static int maxProductOfThree(List<Integer> nums) {\n        nums.sort(null);\n\n        int n = nums.size();\n        int product1 = nums.get(n - 1) * nums.get(n - 2) * nums.get(n - 3);\n        int product2 = nums.get(0) * nums.get(1) * nums.get(n - 1);\n        int result = product2;\n        if (product1 > result) {\n            result = product1;\n        }\n        return result;\n    }\n\n    public static List<String> splitWords(String s) {\n        return s.isEmpty() ? List.of() : Arrays.asList(s.split(\" \"));\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        List<Integer> nums = splitWords(scanner.nextLine()).stream().map(Integer::parseInt).collect(Collectors.toList());\n        scanner.close();\n        int res = maxProductOfThree(nums);\n        System.out.println(res);\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    {
+      "input": "1 2 3 4\n",
+      "expected": "24\n"
+    },
+    {
+      "input": "-4 -3 1 2 3\n",
+      "expected": "36\n"
+    },
+    {
+      "input": "-10 -10 5 2\n",
+      "expected": "500\n"
+    }
+  ]
+}

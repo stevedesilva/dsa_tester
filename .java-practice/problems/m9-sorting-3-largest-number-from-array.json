@@ -1,0 +1,27 @@
+{
+  "id": "m9-sorting-3-largest-number-from-array",
+  "title": "M9 Sorting - 3 Largest Number from Array",
+  "description": "Input: [3, 30, 34, 5, 9]\nOutput: \"9534330\"\nExplanation: Arrange numbers to form 9-5-34-3-30.\n             This gives 9534330, which is larger than any other arrangement.\n\nInput: [10, 2]\nOutput: \"210\"\nExplanation: \"210\" is larger than \"102\".\n\nInput: [0, 0, 0]\nOutput: \"0\"\nExplanation: When all numbers are zero, return \"0\" instead of \"000\".\n\nInput: [121, 12]\nOutput: \"12121\"\nExplanation: \"12121\" is larger than \"12112\".\n             Comparing: \"121\" + \"12\" = \"12112\" vs \"12\" + \"121\" = \"12121\"",
+  "starterCode": "import java.util.Arrays;\nimport java.util.List;\nimport java.util.Scanner;\nimport java.util.stream.Collectors;\n\nclass Solution {\n    public static String largestNumberFromArray(List<Integer> nums) {\n        // WRITE YOUR BRILLIANT CODE HERE\n        return \"\";\n    }\n\n    public static List<String> splitWords(String s) {\n        return s.isEmpty() ? List.of() : Arrays.asList(s.split(\" \"));\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        List<Integer> nums = splitWords(scanner.nextLine()).stream().map(Integer::parseInt).collect(Collectors.toList());\n        scanner.close();\n        String res = largestNumberFromArray(nums);\n        System.out.println(res);\n    }\n}\n",
+  "solution": "import java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.Comparator;\nimport java.util.List;\nimport java.util.Scanner;\nimport java.util.stream.Collectors;\n\nclass Solution {\n    public static String largestNumberFromArray(List<Integer> nums) {\n        // Convert integers to strings\n        List<String> strNums = new ArrayList<>();\n        for (int num : nums) {\n            strNums.add(String.valueOf(num));\n        }\n\n        // Custom comparator: compare concatenations\n        strNums.sort(new Comparator<String>() {\n            @Override\n            public int compare(String a, String b) {\n                String order1 = a + b;\n                String order2 = b + a;\n                return order2.compareTo(order1);  // Descending order\n            }\n        });\n\n        // Handle edge case: all zeros\n        if (strNums.get(0).equals(\"0\")) {\n            return \"0\";\n        }\n\n        // Concatenate sorted strings\n        StringBuilder result = new StringBuilder();\n        for (String s : strNums) {\n            result.append(s);\n        }\n        return result.toString();\n    }\n\n    public static List<String> splitWords(String s) {\n        return s.isEmpty() ? List.of() : Arrays.asList(s.split(\" \"));\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        List<Integer> nums = splitWords(scanner.nextLine()).stream().map(Integer::parseInt).collect(Collectors.toList());\n        scanner.close();\n        String res = largestNumberFromArray(nums);\n        System.out.println(res);\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    {
+      "input": "3 30 34 5 9\n",
+      "expected": "9534330\n"
+    },
+    {
+      "input": "10 2\n",
+      "expected": "210\n"
+    },
+    {
+      "input": "0 0 0\n",
+      "expected": "0\n"
+    },
+    {
+      "input": "121 12\n",
+      "expected": "12121\n"
+    }
+  ]
+}

@@ -25,6 +25,16 @@ export default function CodeEditor({ value, onChange, language, disabled }: Prop
         minimap: { enabled: false },
         readOnly: disabled,
         scrollBeyondLastLine: false,
+        quickSuggestions: false,
+        suggestOnTriggerCharacters: false,
+        wordBasedSuggestions: 'off',
+        snippetSuggestions: 'none',
+        tabCompletion: 'off',
+        acceptSuggestionOnEnter: 'off',
+        inlineSuggest: { enabled: false },
+        parameterHints: { enabled: false },
+        inlayHints: { enabled: 'off' },
+        suggest: { showWords: false, showSnippets: false, preview: false },
       }}
     />
   )

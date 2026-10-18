@@ -43,7 +43,9 @@ to develop or package it, not to use an installed VSIX.
 
 1. Open the practice panel and click **Import Relative Sort Array**. This imports
    your supplied starter code and three example tests, without a solution.
-2. Click **Random Problem**. The statement appears in the panel and `Solution.java`
+2. Click **Practice** beside a question in the bank, or **Random Problem** to have
+   one chosen for you. Both start a fresh attempt from the starter code; previous
+   attempts remain available in **History**. The statement appears in the panel and `Solution.java`
    opens in the editor.
 3. Wait for Java tooling to initialize. Write the missing algorithm.
 4. Click **Run Tests**. The solution is saved, compiled, and executed against every
@@ -120,16 +122,19 @@ Other question fields retain their original snapshot until you start a new attem
 - These are local Java processes running with your user permissions, not a hosted
   execution sandbox.
 
-## Java completion without AI answers
+## Unaided solution coding
 
-The Red Hat Java extension supplies method/type completion, parameter hints, and
-inline diagnostics. If completion does not initialize, verify its configured JDK
-and use **Java: Clean Java Language Server Workspace** to reload Java tooling.
+The provided workspace and newly created attempts disable Java completion, word
+and snippet suggestions, inline suggestions, parameter hints, and inlay hints.
+They also disable Cursor Tab and GitHub Copilot completions. The Red Hat Java
+extension still provides diagnostics and Java project support.
 
-In Cursor's settings, disable **Cursor Tab** during practice and avoid invoking
-AI generation. Exact settings labels vary by Cursor version. This application
-does not call AI services or require an API key, and it does not change your
-global Cursor settings.
+Open `dsa-tester.code-workspace` to apply these settings to existing attempts.
+The practice extension does not call AI services or require an API key.
+These editor settings do not block manually invoked AI chat or other AI
+extensions. For unaided practice, disable other AI extensions for the workspace
+and do not invoke Cursor Chat/Agent or inline AI generation. This is a local
+practice setup, not an enforced exam environment.
 
 ## Local files and backups
 
@@ -142,7 +147,7 @@ Files live under the **first workspace folder**:
   attempts/<id>/
     attempt.json                    # Original problem + latest run summary
     PROBLEM.md                      # Statement copy
-    .vscode/settings.json           # Java source/output paths
+    .vscode/settings.json           # Java paths and unaided editor settings
     src/Solution.java               # Your working solution
     runs/<run-id>/
       Solution.java                 # Exact submitted code
@@ -173,7 +178,8 @@ immutable attempt snapshots, run history, validation, and random selection.
 
 Interactive smoke check in Cursor:
 
-1. Import the example, open a random attempt, and confirm Java method completion.
+1. Import the example, open a random attempt, and confirm typing identifiers or
+   `.` does not offer completions, snippets, inline suggestions, or parameter hints.
 2. Run the untouched starter: all three example tests should fail.
 3. Implement the algorithm and verify the tests pass.
 4. Add/edit a problem using the form; check failed form validation preserves input.

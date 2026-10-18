@@ -1,0 +1,13 @@
+{
+  "id": "m8-stack-1-valid-parentheses",
+  "title": "M8 Stack - 1 Valid Parentheses",
+  "description": "For this question we ask you to determine whether or not a string has valid parentheses. A string has valid parentheses if each bracket is closed and opened in the same order and has the same type. Parentheses has 3 types (), {} and []\n\nInput & Output\n\nInput\ns — String containing the parentheses\n\nOutput\nWhether or not the string is valid\n\nExample\n\nInput\n\ns = ()\n\nOutput\n\ntrue\n\nExplanation\n\nThis is a valid parentheses sequence.\n\nExample\n\nInput\n\ns = (}\n\nOutput\n\nfalse\n\nExplanation\n\nThis is not valid as } cannot match (.\n\nConstraints\n\n    1 <= s.length <= 100000",
+  "starterCode": "import java.util.Scanner;\n\nclass Solution {\n    public static boolean validParentheses(String s) {\n        // WRITE YOUR BRILLIANT CODE HERE\n        return false;\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        boolean res = validParentheses(s);\n        System.out.println(res);\n    }\n}\n",
+  "solution": "import java.util.Map;\nimport java.util.Scanner;\nimport java.util.Stack;\n\nclass Solution {\n    public static boolean validParentheses(String s) {\n        Stack<Character> stack = new Stack<>();\n        Map<Character, Character> pairs = Map.of(')', '(', '}', '{', ']', '[');\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (pairs.containsKey(c)) {\n                if (!stack.isEmpty() && stack.peek() == pairs.get(c)) {\n                    stack.pop();\n                } else {\n                    return false;\n                }\n            } else {\n                stack.push(c);\n            }\n        }\n        return stack.isEmpty();\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        String s = scanner.nextLine();\n        scanner.close();\n        boolean res = validParentheses(s);\n        System.out.println(res);\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    { "input": "()\n", "expected": "true\n" },
+    { "input": "(}\n", "expected": "false\n" }
+  ]
+}

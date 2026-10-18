@@ -1,0 +1,23 @@
+{
+  "id": "m9-sorting-1-counting-swaps",
+  "title": "M9 Sorting - 1 Practice: Counting Swaps",
+  "description": "Count the number of swaps needed to sort an array using bubble sort. This problem builds on your understanding of the bubble sort algorithm by tracking how many swap operations are performed.\n\nInput\n\n    arr: a list of integers to be sorted\n\nOutput\n\nAn integer representing the total number of swaps performed during bubble sort\n\nExamples\n\nExample 1:\n\nInput: arr = [1, 2, 3, 4, 5]\n\nOutput: 0\n\nExplanation:\n\n    The array is already sorted, so no swaps are needed\n\nExample 2:\n\nInput: arr = [5, 4, 3, 2, 1]\n\nOutput: 10\n\nExplanation:\n\n    This is the worst case (reverse sorted)\n    Pass 1: 4 swaps (5 bubbles to end)\n    Pass 2: 3 swaps (4 bubbles to position)\n    Pass 3: 2 swaps (3 bubbles to position)\n    Pass 4: 1 swap (2 bubbles to position)\n    Total: 4 + 3 + 2 + 1 = 10 swaps\n\nExample 3:\n\nInput: arr = [3, 1, 4, 2]\n\nOutput: 3\n\nExplanation:\n\n    Pass 1: Compare and swap (3,1), (3,4) no swap, (4,2) \u2192 2 swaps \u2192 [1, 3, 2, 4]\n    Pass 2: (1,3) no swap, (3,2) swap \u2192 1 swap \u2192 [1, 2, 3, 4]\n    Total: 3 swaps",
+  "starterCode": "import java.util.Arrays;\nimport java.util.List;\nimport java.util.Scanner;\nimport java.util.stream.Collectors;\n\nclass Solution {\n    public static int countSwapsBubbleSort(List<Integer> arr) {\n        // WRITE YOUR BRILLIANT CODE HERE\n        return 0;\n    }\n\n    public static List<String> splitWords(String s) {\n        return s.isEmpty() ? List.of() : Arrays.asList(s.split(\" \"));\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        List<Integer> arr = splitWords(scanner.nextLine()).stream().map(Integer::parseInt).collect(Collectors.toList());\n        scanner.close();\n        int res = countSwapsBubbleSort(arr);\n        System.out.println(res);\n    }\n}\n",
+  "solution": "import java.util.Arrays;\nimport java.util.List;\nimport java.util.Scanner;\nimport java.util.stream.Collectors;\n\nclass Solution {\n    public static int countSwapsBubbleSort(List<Integer> arr) {\n        int n = arr.size();\n        int swapCount = 0;\n\n        for (int i = 0; i < n; i++) {\n            boolean swapped = false;\n            for (int j = 0; j < n - 1 - i; j++) {\n                if (arr.get(j) > arr.get(j + 1)) {\n                    int temp = arr.get(j);\n                    arr.set(j, arr.get(j + 1));\n                    arr.set(j + 1, temp);\n                    swapCount++;\n                    swapped = true;\n                }\n            }\n            if (!swapped) {\n                break;\n            }\n        }\n\n        return swapCount;\n    }\n\n    public static List<String> splitWords(String s) {\n        return s.isEmpty() ? List.of() : Arrays.asList(s.split(\" \"));\n    }\n\n    public static void main(String[] args) {\n        java.util.Scanner scanner = new java.util.Scanner(System.in);\n        List<Integer> arr = splitWords(scanner.nextLine()).stream().map(Integer::parseInt).collect(Collectors.toList());\n        scanner.close();\n        int res = countSwapsBubbleSort(arr);\n        System.out.println(res);\n    }\n}\n",
+  "mainClass": "Solution",
+  "timeLimitMs": 2000,
+  "tests": [
+    {
+      "input": "1 2 3 4 5\n",
+      "expected": "0\n"
+    },
+    {
+      "input": "5 4 3 2 1\n",
+      "expected": "10\n"
+    },
+    {
+      "input": "3 1 4 2\n",
+      "expected": "3\n"
+    }
+  ]
+}
